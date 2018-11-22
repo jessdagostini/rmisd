@@ -16,6 +16,9 @@ public interface ClientInterface extends Remote {
     public String getName() throws RemoteException;
     public int getTime() throws RemoteException;
     public void setTime(int diff) throws RemoteException;
+    public void setId(int id) throws RemoteException;
+    public int getId() throws RemoteException;
+    public void setCoordinator() throws RemoteException;
     public void randonize() throws RemoteException;
     public String getFormattedTime() throws RemoteException;
 }

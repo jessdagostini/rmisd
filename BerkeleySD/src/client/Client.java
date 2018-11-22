@@ -18,6 +18,8 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     private RelogioInterface clockServer;
     private String name = null;
     private int hora = 0;
+    private int id;
+    private Boolean coordinator = false;
     
     protected Client(String name, RelogioInterface clockServer) throws RemoteException {
         this.clockServer = clockServer;
@@ -36,6 +38,21 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     @Override
     public String getName() throws RemoteException {
         return this.name;
+    }
+    
+    @Override
+    public void setId(int id) throws RemoteException {
+        this.id = id;
+        System.out.println("ID Cliente: " + this.id);
+    }
+    
+    @Override
+    public int getId() throws RemoteException {
+        return this.id;
+    }
+    
+    public void setCoordinator() throws RemoteException {
+        this.coordinator = true;
     }
     
     @Override
@@ -72,31 +89,33 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
     
     public void run() throws RemoteException {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Escolha uma ação:\n"
-                    + "1 - Synchronize\n 2 - Randonize\n 3 - Show Time");
-        while (scan.hasNext()) {
-            int action;
-            action = Integer.parseInt(scan.nextLine());
-            switch(action) {
-                case 1:
-                    this.clockServer.synchronize();
-                    break;
-                
-                case 2:
-                    this.clockServer.randonize();
-                    break;
-                    
-                case 3:
-                    this.clockServer.showTime();
-                    break;
-                    
-                default:
-                    this.clockServer.showTime();
-                    break;
+        if (coordinator) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Escolha uma ação:\n"
+                        + "1 - Synchronize\n 2 - Randonize\n 3 - Show Time");
+            while (scan.hasNext()) {
+                int action;
+                action = Integer.parseInt(scan.nextLine());
+                switch(action) {
+                    case 1:
+                        this.clockServer.synchronize();
+                        break;
+
+                    case 2:
+                        this.clockServer.randonize();
+                        break;
+
+                    case 3:
+                        this.clockServer.showTime();
+                        break;
+
+                    default:
+                        this.clockServer.showTime();
+                        break;
+                }
+            System.out.println("Escolha uma ação:\n"
+                        + "1 - Synchronize\n2 - Randonize\n3 - Show Time");
             }
-        System.out.println("Escolha uma ação:\n"
-                    + "1 - Synchronize\n2 - Randonize\n3 - Show Time");
         }
     }
 }

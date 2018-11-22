@@ -20,7 +20,7 @@ public class ClientDrive {
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Scanner scan = new Scanner(System.in);
         String name = scan.nextLine();
-        Registry r = LocateRegistry.getRegistry("192.168.1.231", 12345);
+        Registry r = LocateRegistry.getRegistry("192.168.0.17", 12345);
         RelogioInterface stub = (RelogioInterface) r.lookup("RelogioInterface");
         Client client = new Client(name, stub);
         client.run();

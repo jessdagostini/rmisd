@@ -18,34 +18,11 @@ import java.util.Scanner;
  */
 public class RelogioServer extends UnicastRemoteObject implements RelogioInterface{
     private ArrayList<ClientInterface> clients;
+    private int idClient;
     
     protected RelogioServer() throws RemoteException {
         clients = new ArrayList<ClientInterface>();
-    }
-    
-    @Override
-    public int getTime() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getFormattedTime() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setTime(int time) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int getDifference() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setDifference(int diff) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        idClient = 0;
     }
 
     @Override
@@ -58,12 +35,19 @@ public class RelogioServer extends UnicastRemoteObject implements RelogioInterfa
 
     @Override
     public void registry(ClientInterface client) throws RemoteException {
+        client.setId(idClient++);
         this.clients.add(client);
         System.out.println("Clientes conectados");
-        int i = 0;
+        int i = 0, cord = 10000;
         while (i < clients.size()) {
-            String name = clients.get(i++).getName();
-            System.out.println(name);
+            if (i < cord) {
+                cord = i;
+                clients.get(i).setCoordinator();
+            }
+            String name = clients.get(i).getName();
+            int id = clients.get(i).getId();
+            System.out.println(id + " - " + name);
+            i++;
         }
     }
 
