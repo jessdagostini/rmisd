@@ -88,6 +88,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         return formatted;
     }
     
+    @Override
     public void run() throws RemoteException {
         if (coordinator) {
             Scanner scan = new Scanner(System.in);
@@ -110,7 +111,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
                         break;
 
                     default:
-                        this.clockServer.showTime();
+                        this.clockServer.disconnect(this.name);
                         break;
                 }
             System.out.println("Escolha uma ação:\n"

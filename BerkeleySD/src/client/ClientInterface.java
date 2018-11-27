@@ -21,4 +21,5 @@ public interface ClientInterface extends Remote {
     public void setCoordinator() throws RemoteException;
     public void randonize() throws RemoteException;
     public String getFormattedTime() throws RemoteException;
+    public void run() throws RemoteException;
 }

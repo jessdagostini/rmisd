@@ -18,4 +18,6 @@ public interface RelogioInterface extends Remote {
     public void registry(ClientInterface client) throws RemoteException;
     public void synchronize() throws RemoteException;
     public void showTime() throws RemoteException;
+    public void disconnect(String nome) throws RemoteException;
+    public void election() throws RemoteException;
 }

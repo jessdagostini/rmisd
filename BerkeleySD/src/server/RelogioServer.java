@@ -78,4 +78,28 @@ public class RelogioServer extends UnicastRemoteObject implements RelogioInterfa
             client.showTime();
         }
     }
+    
+    @Override
+    public void disconnect(String nome) throws RemoteException {
+        for (ClientInterface client:clients){
+            if (client.getName().equals(nome)) {
+                System.out.println("Cliente " + nome + " desconectado");
+                clients.remove(client);
+                election();
+                break;
+            }
+        }        
+    }
+    
+    @Override
+    public void election() throws RemoteException {
+        int coord = 1000;
+        for (ClientInterface client:clients){
+            if (client.getId() < coord) {
+                coord = client.getId();
+            }
+        }
+        clients.get(coord).setCoordinator();
+        clients.get(coord).run();
+    }
 }
