@@ -22,4 +22,5 @@ public interface ClientInterface extends Remote {
     public void randonize() throws RemoteException;
     public String getFormattedTime() throws RemoteException;
     public void run() throws RemoteException;
+    public void exit() throws RemoteException;
 }

@@ -51,6 +51,7 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         return this.id;
     }
     
+    @Override
     public void setCoordinator() throws RemoteException {
         this.coordinator = true;
     }
@@ -86,6 +87,11 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
         formatted = hour + ":" + minutes;
         
         return formatted;
+    }
+    
+    @Override
+    public void exit() {
+        System.exit(0);
     }
     
     @Override
