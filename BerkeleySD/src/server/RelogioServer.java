@@ -19,6 +19,7 @@ import java.util.Scanner;
 public class RelogioServer extends UnicastRemoteObject implements RelogioInterface{
     private ArrayList<ClientInterface> clients;
     private int idClient;
+    private int coord = 1000;
     
     protected RelogioServer() throws RemoteException {
         clients = new ArrayList<ClientInterface>();
@@ -38,10 +39,10 @@ public class RelogioServer extends UnicastRemoteObject implements RelogioInterfa
         client.setId(idClient++);
         this.clients.add(client);
         System.out.println("Clientes conectados");
-        int i = 0, cord = 10000;
+        int i = 0;
         while (i < clients.size()) {
-            if (i < cord) {
-                cord = i;
+            if (i < coord) {
+                this.coord = i;
                 clients.get(i).setCoordinator();
             }
             String name = clients.get(i).getName();
@@ -85,22 +86,35 @@ public class RelogioServer extends UnicastRemoteObject implements RelogioInterfa
             if (client.getName().equals(nome)) {
                 System.out.println("Cliente " + nome + " desconectado");
                 clients.remove(client);
+                this.coord = 1000;
                 client.exit();
             }
-        } 
+        }
     }
     
     @Override
-    public void election() throws RemoteException {
-        int coord = 1000;
+    public String election() throws RemoteException {
         System.out.println("Eleição");
-        for (ClientInterface client:clients){
-            if (client.getId() < coord) {
-                coord = client.getId();
+        boolean election = true;
+        for (ClientInterface client:clients) {
+            System.out.println("Entrou no primeiro for");
+            if (client.isCoordinator()) {
+                election = false;
+                return "Cliente " + client.getName() + " is the coordinator";
             }
         }
-        System.out.println("coord " + coord );
-        clients.get(coord).setCoordinator();
-        clients.get(coord).run();
+        
+        if (election) {
+            int i = 0;
+            while (i < clients.size()) {
+                if (i < this.coord) {
+                    this.coord = i;
+                }
+                i++;
+            }
+            clients.get(this.coord).setCoordinator();
+            clients.get(this.coord).run();
+        }
+        return "New coordinator is " + clients.get(this.coord).getName();
     }
 }

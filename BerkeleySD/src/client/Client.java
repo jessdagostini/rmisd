@@ -95,6 +95,11 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
     }
     
     @Override
+    public boolean isCoordinator() throws RemoteException {
+        return this.coordinator;
+    }
+    
+    @Override
     public void run() throws RemoteException {
         if (coordinator) {
             Scanner scan = new Scanner(System.in);
@@ -122,6 +127,25 @@ public class Client extends UnicastRemoteObject implements ClientInterface {
                 }
             System.out.println("Escolha uma ação:\n"
                         + "1 - Synchronize\n2 - Randonize\n3 - Show Time");
+            }
+        } else {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("1 - Convocar Eleição");
+            while (scan.hasNext()) {
+                int action;
+                action = Integer.parseInt(scan.nextLine());
+                String output;
+                switch(action) {
+                    case 1:
+                        output = this.clockServer.election();
+                        System.out.println(output);
+                        break;
+                        
+                    default:
+                        this.clockServer.disconnect(this.name);
+                        break;
+                }
+                System.out.println("1 - Convocar Eleição");
             }
         }
     }
